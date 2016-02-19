@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     Canvas m_PauseMenuScr;
 
+    [SerializeField]
+    UnityEngine.UI.Text m_LifeCounter;
+
     private static GameManager m_Instance;
 	public static GameManager Instance 
 	{
@@ -59,6 +62,7 @@ public class GameManager : MonoBehaviour
         Ball.CanUpdate = false;
         Paddle.CanUpdate = false;
         m_Lives = MAX_LIVES;
+        m_LifeCounter.text = m_Lives.ToString();
     }
 
     void Update()
@@ -95,6 +99,8 @@ public class GameManager : MonoBehaviour
         Ball.CanUpdate = false;
         Paddle.CanUpdate = false;
         m_OptionsMenuScr.enabled = false;
+        m_GameOverScr.enabled = false;
+        m_GameWonScr.enabled = false;
         m_MainMenuScr.enabled = true;
     }
 
@@ -132,43 +138,49 @@ public class GameManager : MonoBehaviour
         Ball.CanUpdate = true;
         Paddle.CanUpdate = true;
         m_MainMenuScr.enabled = false;
-        OnResetGame(true);
+
+        m_LifeCounter.text = MAX_LIVES.ToString();
+        
+        if (Kitty != null)
+            Destroy(Kitty);
+
+        Tiles.ResetTiles();
+
+        Ball.ResetBall();
+
+        Paddle.ResetPaddle();
     }
 
     public void OnGameWon()
     {
         m_TransitionOn = true;
-        StartCoroutine(gameWon_cr(2));
+        m_GameWonScr.enabled = true;
+        PauseObjects(true);
     }
 
     public void OnResetGame(bool aResetTiles)
     {
-        if(aResetTiles)
-        {
-            if (Kitty != null)
-                Destroy(Kitty);
-
-            Tiles.ResetTiles();
-        }
-
-        Ball.ResetBall();
-
-        Paddle.ResetPaddle();
+        m_OptionsMenuScr.enabled = false;
+        m_GameOverScr.enabled = false;
+        m_GameWonScr.enabled = false;
+        StartCoroutine(getReady_cr(aResetTiles));
     }
     
 
     public void OnGameOver()
     {
         m_Lives--;
-        if(m_Lives==0)
+        m_LifeCounter.text = m_Lives.ToString();
+        if (m_Lives==0)
         {
             m_TransitionOn = true;
-            StartCoroutine(gameOver_cr(2.0f));
+            m_GameOverScr.enabled = true;
+            PauseObjects(true);
         }
         else
         {
             m_TransitionOn = true;
-            StartCoroutine(loseLife_cr(2.0f));
+            StartCoroutine(getReady_cr(false));
         }
 
         if(m_Lives == 0)
@@ -177,7 +189,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator loseLife_cr(float pauseTime)
+    IEnumerator getReady_cr(bool aWasRestarted)
     {
         PauseObjects(true);
 
@@ -192,52 +204,20 @@ public class GameManager : MonoBehaviour
 
         PauseObjects(false);
 
-        OnResetGame(false);
+        if (aWasRestarted)
+        {
+            if (Kitty != null)
+                Destroy(Kitty);
+
+            Tiles.ResetTiles();
+        }
+
+        Ball.ResetBall();
+
+        Paddle.ResetPaddle();
+
+        m_LifeCounter.text = m_Lives.ToString();
     }
-
-    IEnumerator gameOver_cr(float pauseTime)
-    {
-        PauseObjects(true);
-
-        m_TransitionOn = true;
-
-        m_GameOverScr.enabled = true;
-
-        yield return new WaitForSeconds(pauseTime);
-
-        m_GameOverScr.enabled = false;
-
-        m_ReadyScr.enabled = true;
-
-        while(Input.anyKeyDown == false)
-            yield return null;
-
-        m_ReadyScr.enabled = false;
-
-        m_TransitionOn = false;
-        
-        PauseObjects(false);
-
-        OnResetGame(true);
-    }
-
-    IEnumerator gameWon_cr(float pauseTime)
-    {
-        PauseObjects(true);
-
-        m_TransitionOn = true;
-
-        m_GameWonScr.enabled = true;
-
-        yield return new WaitForSeconds(pauseTime);
-
-        m_GameWonScr.enabled = false;
-
-        m_TransitionOn = false;
-
-        PauseObjects(false);
-        
-        OnBackToMenu();
-    }
+    
 
 }

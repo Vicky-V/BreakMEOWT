@@ -4,6 +4,7 @@ using System.Collections;
 public class Character : MonoBehaviour 
 {
     SpriteRenderer m_Renderer;
+    Rigidbody2D m_Rigidbody;
 
     [SerializeField]
     Sprite m_Idle;
@@ -22,6 +23,7 @@ public class Character : MonoBehaviour
     void Start()
     {
         m_Renderer = GetComponent<SpriteRenderer>();
+        m_Rigidbody = GetComponent<Rigidbody2D>();
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -39,8 +41,15 @@ public class Character : MonoBehaviour
         }
     }
 
-    void OnCollisionExit2D(Collision2D other)
+    void Update()
     {
-        m_Renderer.sprite = m_Falling;
+        if(m_Rigidbody.velocity.sqrMagnitude != 0)
+        {
+            m_Renderer.sprite = m_Falling;
+        }
+        else
+        {
+            m_Renderer.sprite = m_Idle;
+        }
     }
 }
