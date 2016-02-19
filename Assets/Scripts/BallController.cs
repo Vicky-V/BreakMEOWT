@@ -10,9 +10,7 @@ public class BallController : MonoBehaviour, I_Updatable
 	Vector2 m_StartingPosition;
 
     const float VELOCITY_FIX_THRESHOLD=0.05F;
-
-    float m_MaxSpeed = 20;
-
+    
     bool m_InMotion = false;
 
     Rigidbody2D m_Rigidbody;

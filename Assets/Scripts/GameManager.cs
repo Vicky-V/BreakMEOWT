@@ -115,10 +115,15 @@ public class GameManager : MonoBehaviour
     
     void PauseObjects(bool aPaused)
     {
-        Rigidbody2D charRB = Kitty.GetComponent<Rigidbody2D>();
+        if(Kitty!=null)
+        {
+            Rigidbody2D charRB = Kitty.GetComponent<Rigidbody2D>();
+            charRB.isKinematic = aPaused;
+        }
+
         Rigidbody2D ballRB = Ball.GetComponent<Rigidbody2D>();
 
-        if (ballRB.velocity.sqrMagnitude < m_BallVelocity.sqrMagnitude)
+        if (ballRB.velocity.sqrMagnitude < m_BallVelocity.sqrMagnitude && ballRB.velocity.sqrMagnitude!=0)
         {
             ballRB.velocity = m_BallVelocity;
         }
@@ -127,7 +132,6 @@ public class GameManager : MonoBehaviour
             m_BallVelocity = ballRB.velocity;
         }
 
-        charRB.isKinematic = aPaused;
         Paddle.CanUpdate = !aPaused;
         Ball.CanUpdate = !aPaused;
         ballRB.isKinematic = aPaused;
@@ -140,15 +144,8 @@ public class GameManager : MonoBehaviour
         m_MainMenuScr.enabled = false;
 
         m_LifeCounter.text = MAX_LIVES.ToString();
-        
-        if (Kitty != null)
-            Destroy(Kitty);
 
-        Tiles.ResetTiles();
-
-        Ball.ResetBall();
-
-        Paddle.ResetPaddle();
+        OnResetGame(true);
     }
 
     public void OnGameWon()
@@ -195,6 +192,16 @@ public class GameManager : MonoBehaviour
 
         m_ReadyScr.enabled = true;
 
+        if (aWasRestarted)
+        {
+            if (Kitty != null)
+                Destroy(Kitty);
+
+            Tiles.ResetTiles();
+        }
+
+        Paddle.ResetPaddle();
+
         while (Input.anyKeyDown == false)
             yield return null;
 
@@ -204,17 +211,7 @@ public class GameManager : MonoBehaviour
 
         PauseObjects(false);
 
-        if (aWasRestarted)
-        {
-            if (Kitty != null)
-                Destroy(Kitty);
-
-            Tiles.ResetTiles();
-        }
-
         Ball.ResetBall();
-
-        Paddle.ResetPaddle();
 
         m_LifeCounter.text = m_Lives.ToString();
     }
