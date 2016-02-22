@@ -3,15 +3,20 @@ using System.Collections;
 
 public class Tile : MonoBehaviour 
 {
+    AudioSource m_Audio;
+
     void Start()
     {
-        
+        m_Audio = GetComponent<AudioSource>();
     }
 
 	void OnCollisionEnter2D(Collision2D other)
 	{
 		if (other.gameObject.tag == "Ball")
         {
+            m_Audio.clip=(AudioManager.Instance.HitTileSounds[Random.Range(0, AudioManager.Instance.HitTileSounds.Length)]);
+            m_Audio.Play();
+
             GameManager.Instance.Tiles.RemoveTile(this.gameObject);
 
             StartCoroutine(disableCollider_cr(0.2f));

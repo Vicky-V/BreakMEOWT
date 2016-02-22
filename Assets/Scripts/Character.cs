@@ -31,7 +31,7 @@ public class Character : MonoBehaviour
         if(other.gameObject.tag == "Paddle")
         {
             GetComponent<BoxCollider2D>().enabled = false;
-            GetComponent<Rigidbody2D>().isKinematic = true;
+            m_Rigidbody.isKinematic = true;
             m_Renderer.sprite = m_Happy;
             GameManager.Instance.OnGameWon();
         }
@@ -47,7 +47,7 @@ public class Character : MonoBehaviour
         {
             m_Renderer.sprite = m_Falling;
         }
-        else
+        else if(m_Rigidbody.isKinematic == false)
         {
             m_Renderer.sprite = m_Idle;
         }
