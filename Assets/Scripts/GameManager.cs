@@ -12,6 +12,12 @@ public class GameManager : MonoBehaviour
     public PaddleController Paddle;
     public TilesGenerator Tiles;
 
+    [SerializeField]
+    SpriteRenderer m_Background;
+    Color m_DefaultBGColor;
+    [SerializeField]
+    Color m_TintBGColor;
+
     [Header("UI Screens")]
 
     [SerializeField]
@@ -70,6 +76,7 @@ public class GameManager : MonoBehaviour
         m_Lives = MAX_LIVES;
         m_LifeCounter.text = m_Lives.ToString();
         AudioManager.Instance.PlayMusic(AudioManager.Instance.MenuMusic);
+        m_DefaultBGColor = m_Background.color;
     }
 
     void Update()
@@ -99,6 +106,11 @@ public class GameManager : MonoBehaviour
     public void SetBallSpeed(UnityEngine.UI.Slider slider)
     {
         Ball.StartingForce = slider.value;
+    }
+
+    public void FlashBackground()
+    {
+        StartCoroutine(flashBG_cr(0.5f));
     }
 
     public void OnBackToMenu()
@@ -213,6 +225,27 @@ public class GameManager : MonoBehaviour
         {
             m_Lives = MAX_LIVES;
         }
+    }
+
+    IEnumerator flashBG_cr(float time)
+    {
+        float t = 0;
+        Color tint = m_TintBGColor;//new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+        float numOFlashes = 1;
+
+        while(t<time)
+        {
+            float x = t / time;
+            float value = Mathf.Cos((x + Mathf.PI / 2) * 2 * numOFlashes * Mathf.PI) * 0.5f + 0.5f;
+
+            m_Background.color = m_DefaultBGColor * (1 - value) + tint * value;
+            
+            t += Time.deltaTime;
+
+            yield return null;
+        }
+
+        m_Background.color = m_DefaultBGColor;
     }
 
     IEnumerator getReady_cr(bool aWasRestarted)

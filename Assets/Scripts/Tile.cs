@@ -19,6 +19,8 @@ public class Tile : MonoBehaviour
 
             GameManager.Instance.Tiles.RemoveTile(this.gameObject);
 
+            GameManager.Instance.FlashBackground();
+
             StartCoroutine(disableCollider_cr(0.2f));
 
             GetComponent<ParticleSystem>().Emit(30);
