@@ -4069,7 +4069,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TilePrefab: {fileID: 169214, guid: cd0077d3e8680ff498e494ca1fbc5499, type: 2}
-  m_SecretTileSprite: {fileID: 21300000, guid: 49931826fd8017a46a6aac19a620c67c, type: 3}
+  m_SecretTileSprite: {fileID: 21300000, guid: 604d6fbb34315f843811f970d9922986, type: 3}
   m_DefaultTileSprite: {fileID: 21300000, guid: 0ed6f341bde697444ada25251ff0f940,
     type: 3}
   m_CharacterPrefab: {fileID: 100914, guid: ce841dbdb302eb7499ac93cd534382e3, type: 2}
