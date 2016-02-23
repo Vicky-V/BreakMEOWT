@@ -71,6 +71,10 @@ public class PaddleController : MonoBehaviour, I_Updatable
                 }
             }
         }
+        else if(other.gameObject.tag == "Ball")
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.HitPaddleSound);
+        }
     }
 
     public void ResetPaddle()

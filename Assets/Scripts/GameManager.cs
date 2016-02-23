@@ -58,6 +58,10 @@ public class GameManager : MonoBehaviour
     Vector2 m_BallVelocity;
 
     bool m_TransitionOn = false;
+    public bool InTransition
+    {
+        get { return m_TransitionOn; }
+    }
 
     void Start()
     {
@@ -70,7 +74,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && (m_MainMenuScr.enabled == false || m_OptionsMenuScr.enabled == false))
         {
             TogglePauseGame();
         }
@@ -105,9 +109,9 @@ public class GameManager : MonoBehaviour
         m_GameOverScr.enabled = false;
         m_GameWonScr.enabled = false;
         m_MainMenuScr.enabled = true;
-
-        if (AudioManager.Instance.IsMusicPlaying() == false)
-            AudioManager.Instance.PlayMusic(AudioManager.Instance.MenuMusic);
+        m_PauseMenuScr.enabled = false;
+        
+        AudioManager.Instance.PlayMusic(AudioManager.Instance.MenuMusic);
     }
 
     public void TogglePauseGame()
@@ -129,7 +133,7 @@ public class GameManager : MonoBehaviour
 
         Rigidbody2D ballRB = Ball.GetComponent<Rigidbody2D>();
 
-        if (ballRB.velocity.sqrMagnitude < m_BallVelocity.sqrMagnitude && ballRB.velocity.sqrMagnitude != 0)
+        if (ballRB.velocity.sqrMagnitude < m_BallVelocity.sqrMagnitude)
         {
             ballRB.velocity = m_BallVelocity;
         }
@@ -153,7 +157,11 @@ public class GameManager : MonoBehaviour
 
         AudioManager.Instance.StopMusic();
 
+        AudioManager.Instance.PlayMusic(AudioManager.Instance.GameMusic);
+
         OnResetGame(true);
+
+        m_TransitionOn = true;
     }
 
     public void OnGameWon()
@@ -161,6 +169,10 @@ public class GameManager : MonoBehaviour
         m_TransitionOn = true;
         m_GameWonScr.enabled = true;
         PauseObjects(true);
+        Ball.ResetBall();
+        AudioManager.Instance.StopMusic();
+
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.VictorySound);
     }
 
     public void OnResetGame(bool aResetTiles)
@@ -168,6 +180,13 @@ public class GameManager : MonoBehaviour
         m_OptionsMenuScr.enabled = false;
         m_GameOverScr.enabled = false;
         m_GameWonScr.enabled = false;
+        m_Lives = MAX_LIVES;
+        m_LifeCounter.text = m_Lives.ToString();
+
+
+        AudioManager.Instance.PlayMusic(AudioManager.Instance.GameMusic);
+        
+
         StartCoroutine(getReady_cr(aResetTiles));
     }
 
@@ -181,6 +200,8 @@ public class GameManager : MonoBehaviour
             m_TransitionOn = true;
             m_GameOverScr.enabled = true;
             PauseObjects(true);
+            AudioManager.Instance.StopMusic();
+
         }
         else
         {
@@ -209,6 +230,8 @@ public class GameManager : MonoBehaviour
         }
 
         Paddle.ResetPaddle();
+
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.KittyFallSound);
 
         while (Input.anyKeyDown == false)
             yield return null;

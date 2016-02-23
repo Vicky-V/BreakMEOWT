@@ -7,6 +7,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip GameMusic;
 
     public AudioClip[] HitTileSounds;
+    public AudioClip HitPaddleSound;
+    public AudioClip KittyFallSound;
     public AudioClip VictorySound;
     public AudioClip GameOverSound;
 
@@ -44,6 +46,9 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMusic(AudioClip music)
     {
+        if (m_AudioSourceMusic.clip == music && m_AudioSourceMusic.isPlaying)
+            return;
+
         m_AudioSourceMusic.clip = music;
         m_AudioSourceMusic.Play();
     }
