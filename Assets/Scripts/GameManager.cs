@@ -34,9 +34,18 @@ public class GameManager : MonoBehaviour
     Canvas m_PauseMenuScr;
 
     [SerializeField]
+    UnityEngine.UI.Text m_PaswordInputText;
+
+    [SerializeField]
     UnityEngine.UI.Text m_LifeCounter;
 
-    
+    [SerializeField]
+    UnityEngine.UI.Text m_Pasword;
+
+    const string SECRET_WORD = "stripes";
+    string m_CurrentPassword ="";
+
+    bool ModeUnlocked = false;
 
     private static GameManager m_Instance;
     public static GameManager Instance
@@ -85,6 +94,33 @@ public class GameManager : MonoBehaviour
         {
             TogglePauseGame();
         }
+    }
+
+    public void CheckPassword()
+    {
+        if(m_PaswordInputText.text.ToLower()==SECRET_WORD)
+        {
+            m_PaswordInputText.color = Color.green;
+            
+            if(ModeUnlocked==false)
+                OnUnlockMode();
+        }
+        else
+        {
+            m_PaswordInputText.color = Color.red;
+        }
+    }
+
+    public void ResetPasswordColor()
+    {
+        m_PaswordInputText.color = Color.black;
+    }
+
+    void OnUnlockMode()
+    {
+        ModeUnlocked = true;
+        Debug.Log("Mode triggered");
+        Tiles.UnlockTheSuperDuperSecretSprite();
     }
 
     public void OnGameExit()
@@ -174,15 +210,22 @@ public class GameManager : MonoBehaviour
         OnResetGame(true);
 
         m_TransitionOn = true;
+
     }
 
     public void OnGameWon()
     {
+        
         m_TransitionOn = true;
         m_GameWonScr.enabled = true;
         PauseObjects(true);
         Ball.ResetBall();
         AudioManager.Instance.StopMusic();
+
+        if (m_CurrentPassword != SECRET_WORD)
+            m_CurrentPassword = SECRET_WORD.Substring(0,m_CurrentPassword.Length+1);
+
+        m_Pasword.text = m_CurrentPassword;
 
         AudioManager.Instance.PlaySFX(AudioManager.Instance.VictorySound);
     }

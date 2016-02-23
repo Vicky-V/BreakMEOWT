@@ -9,7 +9,9 @@ public class BallController : MonoBehaviour, I_Updatable
 
 	Vector2 m_StartingPosition;
 
-    const float VELOCITY_FIX_THRESHOLD=0.05F;
+    const float VELOCITY_FIX_THRESHOLD=0.5F;
+
+    float m_DefaultSpeed;
     
     bool m_InMotion = false;
 
@@ -71,6 +73,7 @@ public class BallController : MonoBehaviour, I_Updatable
             m_InMotion = true;
             m_Trail.time = m_TrailTime;
             m_Rigidbody.AddForce(m_StartingDirection.normalized * StartingForce, ForceMode2D.Impulse);
+            m_DefaultSpeed = m_Rigidbody.velocity.magnitude;
         }
 
         //PHYSICS ADJUSTMENTS

@@ -8,6 +8,12 @@ public class TilesGenerator : MonoBehaviour
     private GameObject m_TilePrefab;
 
     [SerializeField]
+    private Sprite m_SecretTileSprite;
+
+    [SerializeField]
+    private Sprite m_DefaultTileSprite;
+
+    [SerializeField]
     private GameObject m_CharacterPrefab;
     
     [Header("Borders")]
@@ -53,8 +59,7 @@ public class TilesGenerator : MonoBehaviour
 	{
         GameManager.Instance.Tiles = this;
 
-        m_TileHeight = m_TilePrefab.GetComponent<SpriteRenderer>().sprite.border.y; 
-		m_TileWidth = m_TilePrefab.GetComponent<SpriteRenderer>().sprite.border.x;
+        SetDefaultSprite();
 
         m_Tiles = new GameObject[m_TilesPerRow * m_NumberOfRows];
         m_TopTiles = new GameObject[m_TilesPerTopRow];
@@ -146,5 +151,19 @@ public class TilesGenerator : MonoBehaviour
         
 
         GenerateTiles();
+    }
+
+    public void UnlockTheSuperDuperSecretSprite()
+    {
+        m_TilePrefab.GetComponent<SpriteRenderer>().sprite = m_SecretTileSprite;
+        m_TileHeight = m_TilePrefab.GetComponent<SpriteRenderer>().sprite.border.y;
+        m_TileWidth = m_TilePrefab.GetComponent<SpriteRenderer>().sprite.border.x;
+    }
+
+    public void SetDefaultSprite()
+    {
+        m_TilePrefab.GetComponent<SpriteRenderer>().sprite = m_DefaultTileSprite;
+        m_TileHeight = m_TilePrefab.GetComponent<SpriteRenderer>().sprite.border.y;
+        m_TileWidth = m_TilePrefab.GetComponent<SpriteRenderer>().sprite.border.x;
     }
 }

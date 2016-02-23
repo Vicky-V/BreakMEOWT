@@ -66,7 +66,6 @@ public class PaddleController : MonoBehaviour, I_Updatable
                 if(Vector3.Dot(Vector3.up, point.normal)<0)
                 {
                     Debug.Log("Cat saved!!");
-                    GameManager.Instance.OnGameWon();
                     return;
                 }
             }
