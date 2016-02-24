@@ -245,12 +245,17 @@ public class GameManager : MonoBehaviour
         StartCoroutine(getReady_cr(aResetTiles));
     }
 
+    public void SetLives(int lives)
+    {
+        m_Lives =Mathf.Clamp(lives,0,MAX_LIVES);
+        
+    }
 
     public void OnGameOver()
     {
         m_Lives--;
         m_LifeCounter.text = m_Lives.ToString();
-        if (m_Lives == 0)
+        if (m_Lives <= 0)
         {
             m_TransitionOn = true;
             m_GameOverScr.enabled = true;
@@ -264,7 +269,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(getReady_cr(false));
         }
 
-        if (m_Lives == 0)
+        if (m_Lives <= 0)
         {
             m_Lives = MAX_LIVES;
         }
