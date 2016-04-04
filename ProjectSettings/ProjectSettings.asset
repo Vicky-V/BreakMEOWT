@@ -26,7 +26,7 @@ PlayerSettings:
   m_ActiveColorSpace: 0
   m_MTRendering: 1
   m_MobileMTRendering: 0
-  m_UseDX11: 1
+  m_UseDX11: 0
   m_Stereoscopic3D: 0
   iosShowActivityIndicatorOnLoading: -1
   androidShowActivityIndicatorOnLoading: -1
@@ -71,10 +71,10 @@ PlayerSettings:
   psp2AcquireBGM: 1
   m_SupportedAspectRatios:
     4:3: 1
-    5:4: 1
-    16:10: 1
-    16:9: 1
-    Others: 1
+    5:4: 0
+    16:10: 0
+    16:9: 0
+    Others: 0
   bundleIdentifier: com.Company.ProductName
   bundleVersion: 1.0
   preloadedAssets: []
@@ -155,7 +155,10 @@ PlayerSettings:
       m_Size: 1
     - m_Icon: {fileID: 0}
       m_Size: 1
-  m_BuildTargetBatching: []
+  m_BuildTargetBatching:
+  - m_BuildTarget: Standalone
+    m_StaticBatching: 1
+    m_DynamicBatching: 1
   webPlayerTemplate: APPLICATION:Default
   m_TemplateCustomTags: {}
   actionOnDotNetUnhandledException: 1
