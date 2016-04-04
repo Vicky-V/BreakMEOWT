@@ -261,7 +261,7 @@ public class GameManager : MonoBehaviour
             m_GameOverScr.enabled = true;
             PauseObjects(true);
             AudioManager.Instance.StopMusic();
-
+            m_Lives = MAX_LIVES;
         }
         else
         {
@@ -269,10 +269,6 @@ public class GameManager : MonoBehaviour
             StartCoroutine(getReady_cr(false));
         }
 
-        if (m_Lives <= 0)
-        {
-            m_Lives = MAX_LIVES;
-        }
     }
 
     IEnumerator flashBG_cr(float time)

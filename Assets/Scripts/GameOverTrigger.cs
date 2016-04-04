@@ -11,7 +11,6 @@ public class GameOverTrigger : MonoBehaviour
         if (other.gameObject.tag == "Ball" || other.gameObject.tag == "The Cat")
         {
             Debug.Log("GAME OVER");
-            GameManager.Instance.SetLives(1);
             GameManager.Instance.OnGameOver();
 
         }
